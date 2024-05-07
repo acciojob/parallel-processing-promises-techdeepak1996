@@ -1,3 +1,29 @@
+function downloadImages(images) {
+  return Promise.all(
+    images.map(image => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error(`Failed to load image's URL: ${image.url}`));
+        img.src = image.url;
+      });
+    })
+  );
+}
+
+btn.addEventListener("click", () => {
+  output.innerHTML = ''; // Clear previous images
+
+  downloadImages(images)
+    .then(loadedImages => {
+      loadedImages.forEach(img => {
+        output.appendChild(img);
+      });
+    })
+    .catch(error => {
+      console.error(error);
+    });
+});
 //your JS code here. If required.
 const output = document.getElementById("output");
 const btn = document.getElementById("download-images-button");
